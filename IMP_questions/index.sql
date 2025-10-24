@@ -189,3 +189,23 @@ select * from worker UNION ALL select * from worker ORDER BY worker_id;
 select w.* from worker as w left join bonus as b on w.worker_id = b.worker_ref_id where b.worker_ref_id is null;
 select worker_id from worker where worker_id not in (select worker_ref_id from bonus);
 
+-- Q-41. Write an SQL query to show all departments along with the number of people in there.
+select department, count(*) from worker group by DEPARTMENT; 
+
+-- Q-42. Write an SQL query to show the last record from a table.
+select * from worker where worker_id = (select max(worker_id) from worker);
+
+-- Q-43. Write an SQL query to fetch the first row of a table.
+select * from worker where worker_id = (select min(worker_id) from worker);
+
+-- Q-44. Write an SQL query to fetch the last five records from a table.
+select * from worker order by worker_id desc limit 5;  -- this will give in desc order of worker_id
+(select * from worker order by worker_id desc limit 5) order by worker_id;
+
+-- Q-45. Write an SQL query to print the name of employees having the highest salary in each department.
+select (select * from worker order by salary desc limit 1) from worker group by department;
+
+-- Q-45. Write an SQL query to print the name of employees having the highest salary in each department.
+select w.department, w.first_name, w.salary from
+(select max(salary) as maxsal, department from worker group by department) temp
+inner join worker w on temp.department = w.department and temp.maxsal = w.salary;
